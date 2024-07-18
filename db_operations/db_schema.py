@@ -1,6 +1,5 @@
 from sqlalchemy import Column, Integer, Text, Date, ForeignKey
 from sqlalchemy.orm import relationship, declarative_base, Session
-import db
 
 
 Base = declarative_base()
@@ -27,15 +26,3 @@ class Contract(Base):
 
     employees = relationship("Employee", back_populates="contracts")
 
-# Assuming postgres_engine is already defined and configured
-with Session(db.postgres_engine) as session:
-    new_employee = Employee(name="Jan", surname="Trusina",zaradenie="výkon")
-    session.add(new_employee)
-    session.commit()
-
-    #SELECT STATEMENT WITH JOIN
-    """stmt = select(Employee).join(Employee.contracts)
-    result = session.execute(stmt)
-    for employee in result.scalars():
-        for contract in employee.contracts:
-            print(f"{contract.id} {contract.mzda_fix} {employee.id} {employee.name}")"""
