@@ -1,8 +1,7 @@
-#from decouple import config
-from sqlalchemy import create_engine, select, Column, Integer, Text, Date, Float, ForeignKey
 import os
+
 from dotenv import load_dotenv
-from sqlalchemy.orm import Session, declarative_base, relationship
+from sqlalchemy import create_engine
 
 # Load environment variables from .env file
 load_dotenv()
@@ -16,4 +15,4 @@ DB_NAME = os.getenv('DB_NAME')
 # Create the database URL
 database_url = f"postgresql+psycopg://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
 
-postgres_engine = create_engine(database_url,echo=True)
+postgres_engine = create_engine(database_url, echo=True)

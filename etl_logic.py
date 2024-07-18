@@ -1,6 +1,5 @@
 import time
-
-from db_operations.db_schema import Session, Employee
+from db_operations.db_schema import Employee
 from db_operations import db
 from sqlalchemy.orm import sessionmaker
 import json
@@ -12,7 +11,6 @@ new_employees_dict = scrapper.ScrapeFormulaChampions(
 ).return_values_to_save_to_database()
 Session = sessionmaker(bind=db.postgres_engine)
 
-#print(new_employees_dict)
 # Open a file for writing
 with open('new_employees.json', 'w') as fp:
     # Serialize new_employees_dict to the file with pretty printing
@@ -25,10 +23,8 @@ def process_employee(attributes):
         new_employee = Employee(name=attributes[0], surname=attributes[1], zaradenie=attributes[2])
         session.add(new_employee)
         session.commit()
-        #print("committed")
-    except Exception as e:
+    except Exception:
         session.rollback()
-        #print(f"Error: {e}")
     finally:
         session.close()
 
@@ -46,18 +42,11 @@ for thread in threads:
     thread.join()
 
 
-
-"""# Assuming postgres_engine is already defined and configured
-with Session(db.postgres_engine) as session:
-    for new_employee,attributes in new_employees_dict.items():
-        attributes = Employee(name=attributes[0],surname=attributes[1],zaradenie=attributes[2])
-        session.add(attributes)
-        session.commit()
-        print("commited")"""
-
-#SELECT STATEMENT WITH JOIN
-"""stmt = select(Employee).join(Employee.contracts)
-    result = session.execute(stmt)
-    for employee in result.scalars():
-        for contract in employee.contracts:
-            print(f"{contract.id} {contract.mzda_fix} {employee.id} {employee.name}")"""
+"""
+#SELECT STATEMENT WITH JOIN    
+stmt = select(Employee).join(Employee.contracts)
+result = session.execute(stmt)
+for employee in result.scalars():
+    for contract in employee.contracts:
+        print(f"{contract.id} {contract.mzda_fix} {employee.id} {employee.name}")
+"""
